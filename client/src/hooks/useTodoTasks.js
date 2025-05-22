@@ -25,6 +25,10 @@ export function useTodoTasks() {
     setTodo((prev) => prev.filter((t) => t.id !== id));
   }
 
+  function reorderTasks(newOrder) {
+    setTodo([...newOrder]); // força re-render mesmo com mesma referência
+  }
+
   function eraseAll(type) {
     type === "todo" ? setTodo([]) : setDone([]);
   }
@@ -37,6 +41,7 @@ export function useTodoTasks() {
     deleteTask,
     updateTask,
     eraseAll,
+    reorderTasks
   };
   
 }

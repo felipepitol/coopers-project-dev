@@ -4,7 +4,7 @@ import { TodoColumn } from "./TodoColumn";
 import { TaskStatus } from "../../types/types";
 
 export function Todo() {
-  const { todo, done, addTask, moveToDone, deleteTask, eraseAll, updateTask } = useTodoTasks();
+  const { todo, done, addTask, moveToDone, deleteTask, eraseAll, updateTask, reorderTasks } = useTodoTasks();
   const [inputValue, setInputValue] = useState("");
 
   const [isLoggedIn, setIsLoggedIn] = useState(true); // ← depois substitui por auth real
@@ -62,6 +62,7 @@ export function Todo() {
             onCheck={moveToDone}
             onDelete={deleteTask}
             onUpdate={updateTask}
+            onReorder={reorderTasks}
           />
           <TodoColumn
             type={TaskStatus.DONE}
