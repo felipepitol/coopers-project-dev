@@ -1,4 +1,6 @@
 import { useState } from "react";
+import formImage from "../../assets/form-image.png";
+import { XIcon } from "@phosphor-icons/react";
 
 export function LoginModal({ isOpen, onClose, onSubmit }) {
   const [isSignup, setIsSignup] = useState(false);
@@ -16,11 +18,11 @@ export function LoginModal({ isOpen, onClose, onSubmit }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 z-30">
       <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-8 relative">
         <button onClick={onClose} className="absolute top-4 right-4 text-sm text-gray-500 hover:text-black">
-          close
+          <XIcon size={24} />
         </button>
 
         <div className="flex items-center gap-4 mb-6">
-          <img src="/user-illustration.svg" alt="Login Graphic" className="w-20 h-20" />
+          <img src={formImage} alt="Login Graphic" className="w-20 h-20" />
           <div>
           <h2 className="text-3xl font-bold">{isSignup ? "Register" : "Sign in"}</h2>
             <p className="text-green-500 text-lg">
