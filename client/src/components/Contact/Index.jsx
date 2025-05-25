@@ -10,55 +10,64 @@ export function Contact() {
     telephone: "",
     message: "",
   });
+  const [status, setStatus] = useState("idle"); // idle|sending|success|error
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("submit contact form:", form);
+    setStatus("sending");
+    try {
+      const res = await fetch("http://localhost:4000/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error((await res.json()).error || res.statusText);
+      setStatus("success");
+      setForm({ name: "", email: "", telephone: "", message: "" });
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    }
   };
 
   return (
-    <section
-      id="contact"
-      aria-labelledby="contact-heading"
-      className="relative bg-white py-12 md:py-20"
-    >
+    <section id="contact" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
-        <div className="relative max-w-lg mx-auto bg-white rounded-2xl shadow-lg pt-12 pb-8 px-6 md:pt-16 md:pb-12 md:px-8">
+        <div className="relative max-w-xl mx-auto bg-white rounded-2xl shadow-lg pt-16 pb-12 px-8">
           {/* Avatar */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="absolute -top-10 left-1/2 transform -translate-x-1/2">
             <div className="relative">
-              <div className="absolute inset-x-1/2 top-1/2 w-12 h-1 bg-green-400 -left-5 md:w-20 md:h-2" />
+              <div className="absolute inset-x-1/2 top-1/2 w-16 h-2 bg-green-400" />
               <img
                 src={ContactAvatar}
                 alt="Avatar"
-                className="h-28 w-28 md:h-28 md:w-28 rounded-full border-4 border-white object-cover"
+                className="rounded-full w-20 h-20 border-4 border-white object-cover"
               />
             </div>
           </div>
 
-          {/* Cabeçalho */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-2 mt-8 mb-6">
-            <img
-              src={EnvelopeIcon}
-              alt=""
-              aria-hidden="true"
-              className="h-8 w-8 text-green-400"
-            />
-            <h2
-              id="contact-heading"
-              className="text-2xl md:text-3xl font-bold text-gray-900"
-            >
+          {/* Header */}
+          <div className="flex items-center gap-4 mb-8 mt-8">
+            <div className="p-2 bg-green-100 rounded">
+              <img
+                src={EnvelopeIcon}
+                alt=""
+                aria-hidden="true"
+                className="w-6 h-6"
+              />
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900">
               GET IN <span className="block font-normal">TOUCH</span>
             </h2>
           </div>
 
-          {/* Formulário */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name */}
             <div>
               <label htmlFor="name" className="block text-gray-700 mb-1">
                 Your name
@@ -74,6 +83,7 @@ export function Contact() {
               />
             </div>
 
+            {/* Email + Telephone */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="email" className="block text-gray-700 mb-1">
@@ -110,6 +120,7 @@ export function Contact() {
               </div>
             </div>
 
+            {/* Message */}
             <div>
               <label htmlFor="message" className="block text-gray-700 mb-1">
                 Message*
@@ -126,13 +137,31 @@ export function Contact() {
               />
             </div>
 
+            {/* Submit */}
             <button
               type="submit"
-              className="w-full bg-green-400 hover:bg-green-500 transition rounded-lg py-3 text-white font-semibold"
+              disabled={status === "sending"}
+              className={`w-full py-3 rounded-lg font-semibold transition
+                ${
+                  status === "sending"
+                    ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                    : "bg-green-400 hover:bg-green-500 text-white"
+                }`}
             >
-              SEND NOW
+              {status === "sending" ? "Sending…" : "SEND NOW"}
             </button>
           </form>
+
+          {status === "success" && (
+            <p className="mt-4 text-center text-green-600">
+              Thank you! Your message has been sent.
+            </p>
+          )}
+          {status === "error" && (
+            <p className="mt-4 text-center text-red-600">
+              Something went wrong. Please try again.
+            </p>
+          )}
         </div>
       </div>
     </section>

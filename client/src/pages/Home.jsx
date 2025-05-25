@@ -11,10 +11,6 @@ export function Home() {
 
     const [showLogin, setShowLogin] = useState(false);
 
-    function handleAuth({ email, password, type }) {
-        console.log("Auth action:", type, email, password);
-    }
-
     return (
         <div>
             <Header onLogin={() => setShowLogin(true)} />
@@ -27,7 +23,6 @@ export function Home() {
             <LoginModal
                 isOpen={showLogin}
                 onClose={() => setShowLogin(false)}
-                onSubmit={handleAuth}
             />
         </div>
     );

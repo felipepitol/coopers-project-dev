@@ -3,12 +3,12 @@ import {
   closestCenter,
   PointerSensor,
   useSensor,
-  useSensors
+  useSensors,
 } from "@dnd-kit/core";
 import {
   SortableContext,
   verticalListSortingStrategy,
-  arrayMove
+  arrayMove,
 } from "@dnd-kit/sortable";
 import { SortableItem } from "./SortableItem";
 import { TaskItem } from "./TaskItem";
@@ -20,7 +20,7 @@ export function TodoColumn({
   onCheck,
   onDelete,
   onUpdate,
-  onReorder // <- importante: função para atualizar a ordem
+  onReorder,
 }) {
   const title = type === "todo" ? "To-do" : "Done";
   const subtitle =
@@ -34,13 +34,14 @@ export function TodoColumn({
   function handleDragEnd(event) {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
-
     const oldIndex = tasks.findIndex((t) => t.id === active.id);
     const newIndex = tasks.findIndex((t) => t.id === over.id);
-
     const newOrder = arrayMove(tasks, oldIndex, newIndex);
-    onReorder?.(newOrder); // passa novo array para o hook pai
+    onReorder(newOrder);
   }
+
+  // filtra itens inválidos antes de renderizar
+  const validTasks = tasks.filter((t) => t && t.id);
 
   return (
     <div className="bg-white text-black rounded-md shadow-lg w-full max-w-sm">
@@ -56,11 +57,11 @@ export function TodoColumn({
             onDragEnd={handleDragEnd}
           >
             <SortableContext
-              items={tasks.map((t) => t.id)}
+              items={validTasks.map((t) => t.id)}
               strategy={verticalListSortingStrategy}
             >
               <ul className="flex flex-col gap-2 mb-6">
-                {tasks.map((task) => (
+                {validTasks.map((task) => (
                   <SortableItem
                     key={task.id}
                     task={task}
@@ -75,7 +76,7 @@ export function TodoColumn({
           </DndContext>
         ) : (
           <ul className="flex flex-col gap-2 mb-6">
-            {tasks.map((task) => (
+            {validTasks.map((task) => (
               <li key={task.id}>
                 <TaskItem
                   task={task}
@@ -91,7 +92,7 @@ export function TodoColumn({
 
         <button
           onClick={onEraseAll}
-          className="w-full py-3 bg-black text-white rounded hover:opacity-90 transition text-lg font-semibold self-auto"
+          className="w-full py-3 bg-black text-white rounded hover:opacity-90 transition text-lg font-semibold"
         >
           erase all
         </button>
