@@ -27,7 +27,7 @@ export function Footer() {
       <img
         src={LineFooter}
         alt=""
-        className="block mt-[-4px mx-auto"
+        className="block mt-[-4px] mx-auto"
       />
       </div>
     </footer>
