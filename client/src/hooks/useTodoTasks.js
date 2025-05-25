@@ -16,80 +16,51 @@ export function useTodoTasks() {
   const [todo, setTodo] = useState([]);
   const [done, setDone] = useState([]);
 
-  // recarrega todo & done do banco
+  // Recarrega do banco
   const reload = useCallback(async () => {
     if (!userId) return;
-    try {
-      const all = await fetchTasks(userId);
-      setTodo(all.filter((t) => !t.is_done));
-      setDone(all.filter((t) => t.is_done));
-    } catch (err) {
-      console.error("[useTodoTasks] reload:", err);
-    }
+    const all = await fetchTasks(userId);
+    setTodo(all.filter((t) => !t.is_done));
+    setDone(all.filter((t) => t.is_done));
   }, [userId]);
 
-  // no login / usuário muda
   useEffect(() => {
     reload();
   }, [reload]);
 
   const addTask = async (label) => {
-    try {
-      await insertTask(userId, label);
-      await reload();
-    } catch (err) {
-      console.error("[useTodoTasks] addTask:", err);
-    }
+    await insertTask(userId, label);
+    await reload();
   };
 
   const updateTask = async (id, label) => {
-    try {
-      await updateTaskSupabase(id, { label });
-      await reload();
-    } catch (err) {
-      console.error("[useTodoTasks] updateTask:", err);
-    }
+    await updateTaskSupabase(id, { label });
+    await reload();
   };
 
   const moveToDone = async (id) => {
-    try {
-      await updateTaskSupabase(id, { is_done: true });
-      await reload();
-    } catch (err) {
-      console.error("[useTodoTasks] moveToDone:", err);
-    }
+    await updateTaskSupabase(id, { is_done: true });
+    await reload();
   };
 
   const deleteTask = async (id) => {
-    try {
-      await deleteTaskSupabase(id);
-      await reload();
-    } catch (err) {
-      console.error("[useTodoTasks] deleteTask:", err);
-    }
+    await deleteTaskSupabase(id);
+    await reload();
   };
 
   const eraseAll = async (type) => {
-    try {
-      const flag = type === "todo" ? false : true;
-      await deleteTasksByStatus(userId, flag);
-      await reload();
-    } catch (err) {
-      console.error("[useTodoTasks] eraseAll:", err);
-    }
+    const flag = type === "todo" ? false : true;
+    await deleteTasksByStatus(userId, flag);
+    await reload();
   };
 
   const reorderTasks = async (newOrder) => {
-    try {
-      const updates = newOrder.map((task, idx) => ({
-        id: task.id,
-        position: idx,
-      }));
-      await reorderTasksSupabase(updates);
-      await reload();
-    } catch (err) {
-      console.error("[useTodoTasks] reorderTasks:", err);
-    }
+    const updates = newOrder.map((task, idx) => ({
+      id: task.id,
+      position: idx,
+    }));
+    await reorderTasksSupabase(updates);
+    await reload();
   };
 
   return {

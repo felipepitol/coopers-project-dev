@@ -12,9 +12,10 @@ export async function fetchTasks(userId) {
 }
 
 export async function addTask(userId, label) {
+  // você pode escolher inicializar position com o timestamp ou com 0
   const { data, error } = await supabase
     .from("todos")
-    .insert({ user_id: userId, label, is_done: false })
+    .insert({ user_id: userId, label, is_done: false, position: 0 })
     .single();
   if (error) throw error;
   return data;
@@ -31,14 +32,10 @@ export async function updateTaskSupabase(id, updates) {
 }
 
 export async function deleteTaskSupabase(id) {
-  const { error } = await supabase
-    .from("todos")
-    .delete()
-    .eq("id", id);
+  const { error } = await supabase.from("todos").delete().eq("id", id);
   if (error) throw error;
 }
 
-// ** deleta em massa por status **
 export async function deleteTasksByStatus(userId, isDone) {
   const { error } = await supabase
     .from("todos")
@@ -49,8 +46,9 @@ export async function deleteTasksByStatus(userId, isDone) {
 }
 
 export async function reorderTasksSupabase(tasks) {
-  const { error } = await supabase
-    .from("todos")
-    .upsert(tasks, { onConflict: "id" });
-  if (error) throw error;
+  await Promise.all(
+    tasks.map(({ id, position }) =>
+      supabase.from("todos").update({ position }).eq("id", id)
+    )
+  );
 }
