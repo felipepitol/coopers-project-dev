@@ -1,23 +1,31 @@
+import { PostSlider } from "../Slider/Index.jsx";
+
 export function Posts() {
-    return (
-        <div>
-            <section className="container mx-auto py-30">
-                <h2 className="text-3xl font-bold mb-4">Posts</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div className="bg-white p-4 rounded shadow">
-                        <h3 className="text-xl font-semibold">Post Title 1</h3>
-                        <p className="text-gray-700">This is a brief description of post 1.</p>
-                    </div>
-                    <div className="bg-white p-4 rounded shadow">
-                        <h3 className="text-xl font-semibold">Post Title 2</h3>
-                        <p className="text-gray-700">This is a brief description of post 2.</p>
-                    </div>
-                    <div className="bg-white p-4 rounded shadow">
-                        <h3 className="text-xl font-semibold">Post Title 3</h3>
-                        <p className="text-gray-700">This is a brief description of post 3.</p>
-                    </div>
-                </div>
-            </section>
+  return (
+    <section
+      id="good-things"
+      aria-labelledby="good-things-heading"
+      className="relative overflow-visible py-20 bg-white"
+    >
+      <div className="container mx-auto px-4">
+        <div className="relative flex flex-col items-center md:items-start">
+          {/* fundo verde */}
+          <div className="absolute -top-10 left-0 w-full md:w-3/4 h-[28rem] bg-green-400 rounded-lg" />
+
+          {/* título */}
+          <h2
+            id="good-things-heading"
+            className="relative z-10 text-4xl font-bold text-white mb-8 whitespace-nowrap self-center md:self-start"
+          >
+            good things
+          </h2>
+
+          {/* slider vaza para baixo */}
+          <div className="relative z-10 overflow-visible w-full">
+            <PostSlider />
+          </div>
         </div>
-    )
+      </div>
+    </section>
+  );
 }
