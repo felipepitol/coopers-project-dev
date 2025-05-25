@@ -15,7 +15,7 @@ export function Posts() {
           {/* título */}
           <h2
             id="good-things-heading"
-            className="relative z-10 text-4xl font-bold text-white mb-8 whitespace-nowrap self-center md:self-start"
+            className="relative z-10 text-4xl font-bold text-white mb-8 whitespace-nowrap self-center md:self-start md:left-44"
           >
             good things
           </h2>
