@@ -1,18 +1,14 @@
-# 1) Todos os .env e variações em qualquer pasta
-.env*
-
-# 2) Node modules em qualquer subdiretório
+# Ignorar todos os .env e variações em qualquer subpasta
+**/.env*
+# Ignorar node_modules em qualquer subpasta
 **/node_modules/
-
-# 3) Logs
+# Ignorar logs
 npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
-
-# 4) Build output (se você gerar pasta de build)
+# Ignorar pastas de build
 **/dist/
 **/build/
-
-# 5) Sistema / IDE
+# Sistema/IDE
 .DS_Store
 .vscode/
